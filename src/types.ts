@@ -35,13 +35,15 @@ export interface ForecastResponse {
   };
 }
 
-export interface RequestInit {
-  headers?: Record<string, string>;
-}
-
-export interface MCPTool {
+export interface MCPTool<T = any> {
   name: string;
   description: string;
-  schema: { [key: string]: z.ZodType };
-  callable: (params: any) => Promise<any>;
+  schema: { [K in keyof T]: z.ZodType };
+  callable: (params: T) => Promise<{
+    content: Array<{
+      type: "text";
+      text: string;
+      [key: string]: unknown;
+    }>;
+  }>;
 }
