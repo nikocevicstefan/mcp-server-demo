@@ -1,11 +1,13 @@
 import { AlertFeature } from "./types.js";
+import { getConfig } from "./config.js";
+
 // Helper function for making NWS API requests
 export async function makeNWSRequest<T>(
   url: string,
   options?: RequestInit,
 ): Promise<T | null> {
   const headers = {
-    "User-Agent": process.env.USER_AGENT,
+    "User-Agent": getConfig().userAgent,
     Accept: "application/geo+json",
     ...options?.headers,
   };

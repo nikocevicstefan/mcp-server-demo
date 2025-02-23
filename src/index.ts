@@ -1,22 +1,17 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
 import { tools } from "./mcp-tools.js";
 import { MCPTool } from "./types.js";
+import { getConfig } from "./config.js";
 import dotenv from "dotenv";
-// Load environment variables
+
 dotenv.config();
-
-if (!process.env.NWS_API_BASE || !process.env.USER_AGENT) {
-  throw new Error('Required environment variables NWS_API_BASE and USER_AGENT must be set');
-}
-
 const server = new McpServer({
-  name: "weather-app",
-  version: "1.0.0",
+  name: getConfig().serverName,
+  version: getConfig().serverVersion,
 });
 
-tools.forEach((tool) => {
+tools.forEach((tool: MCPTool) => {
   server.tool(tool.name, tool.description, tool.schema, tool.callable);
 });
 

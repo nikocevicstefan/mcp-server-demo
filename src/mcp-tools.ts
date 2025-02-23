@@ -7,6 +7,8 @@ import {
   ForecastPeriod,
   MCPTool,
 } from "./types.js";
+import { getConfig } from "./config.js";
+
 export const tools: MCPTool[] = [
   {
     name: "get-alerts",
@@ -19,7 +21,7 @@ export const tools: MCPTool[] = [
     },
     callable: async ({ state }: { state: string }) => {
       const stateCode = state.toUpperCase();
-      const alertsUrl = `${process.env.NWS_API_BASE}/alerts?area=${stateCode}`;
+      const alertsUrl = `${getConfig().nwsApiBase}/alerts?area=${stateCode}`;
       const alertsData = await makeNWSRequest<AlertsResponse>(alertsUrl);
 
       if (!alertsData) {
@@ -81,7 +83,7 @@ export const tools: MCPTool[] = [
       longitude: number;
     }) => {
       // Get grid point data
-      const pointsUrl = `${process.env.NWS_API_BASE}/points/${latitude.toFixed(4)},${longitude.toFixed(4)}`;
+      const pointsUrl = `${getConfig().nwsApiBase}/points/${latitude.toFixed(4)},${longitude.toFixed(4)}`;
       const pointsData = await makeNWSRequest<PointsResponse>(pointsUrl);
 
       if (!pointsData) {
